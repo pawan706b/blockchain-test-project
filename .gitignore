@@ -1,1 +1,8 @@
 smart_contracts/node_modules
+smart_contracts/artifacts
+smart_contracts/cache
+smart_contracts/typechain-types
+frontend/node_modules
+smart_contracts/coverage
+smart_contracts/.env
+.env

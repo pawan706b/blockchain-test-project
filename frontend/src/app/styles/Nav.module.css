@@ -1,0 +1,39 @@
+.header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.title {
+  margin-right: auto; /* Pushes the button container to the right */
+}
+
+.navLinks {
+  display: flex;
+  gap: 20px;
+  align-items: center; /* Center the links vertically */
+  margin-right: 280px; /* Decreased margin for smaller screens */
+}
+
+.navLinks > :global(a) {
+  text-decoration: none;
+  color: #05769f; /* Default link color */
+  font-weight: bold; /* Example: Making links bold */
+}
+
+.navLinks > :global(a):hover {
+  text-decoration: underline; /* Underline on hover */
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+  .navLinks {
+    flex-wrap: wrap; /* Wrap links on smaller screens */
+    gap: 10px; /* Reduced gap between links */
+    margin-right: 0; /* Remove right margin */
+  }
+
+  .navLinks > :global(a) {
+    font-size: 14px; /* Decrease font size for smaller screens */
+  }
+}

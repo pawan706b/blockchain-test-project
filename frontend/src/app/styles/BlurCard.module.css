@@ -1,0 +1,47 @@
+.blurCard {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 8px; 
+  padding: 20px;
+  backdrop-filter: blur(10px); /* Apply a blur effect */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  margin: 0 auto; /* Center the card */
+  max-width: 600px; /* Limit the card width */
+  height: 300px; /* Fixed height */
+  overflow-y: auto; /* Add scroll if content exceeds height */
+}
+
+.inputRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px; /* Increased margin for better spacing between rows */
+}
+
+.inputRow select,
+.inputRow input[type="number"],
+.inputRow input[type="text"] {
+  width: calc(50% - 10px); /* Adjust input width to fit in half of the container */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.errorMessage {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px; /* Spacing between error messages and buttons */
+}
