@@ -54,11 +54,11 @@ const WithdrawCard: React.FC = () => {
 			)
 		// If selected option is Eth
 		if (selectedOption === "option2") {
-			return <div>Balance: {balanceEth?.result?.toString()}</div>
+			return <div>Deposited Balance: {balanceEth?.result?.toString()}</div>
 		}
 		// If selected option is ERC20 token
 		else if (selectedOption === "option3") {
-			return <div>Balance: {balanceErc20?.result?.toString()}</div>
+			return <div>Deposited Balance: {balanceErc20?.result?.toString()}</div>
 		}
 	}
 
