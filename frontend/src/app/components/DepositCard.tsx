@@ -1,8 +1,8 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from "../styles/BlurCard.module.css"
-import { type BaseError, useAccount, useBalance, useWriteContract, useReadContract } from 'wagmi'
+import { type BaseError, useAccount, useBalance, useWriteContract, useReadContract, useBlockNumber, useWatchContractEvent } from 'wagmi'
 import { FSTokenAbi, FSVaultABI } from '../constants/abi'
 import { FSTokenAddress, FSVaultAddress } from '../constants/address'
 import { ethers } from 'ethers'
@@ -23,8 +23,11 @@ const Deposit: React.FC = () => {
 	const { error: errorERC20, isPending: isPendingERC20, writeContract: writeERC20 } = useWriteContract()
 	const { error: errorERC20Approve, isPending: isPendingERC20Approve, writeContract: writeERC20Approve } = useWriteContract()
 
+	// To update states on block updates
+	const { data: blockNumber } = useBlockNumber({ watch: true }) 
+
 	// Reading user's allowamce amount
-	const { data: erc20Allowance, error: allowanceError } = useReadContract({
+	const { data: erc20Allowance, error: allowanceError, refetch: refetchAllowance } = useReadContract({
 		address: erc20AddrInput,
 		abi: FSTokenAbi,
 		functionName: 'allowance',
@@ -32,15 +35,46 @@ const Deposit: React.FC = () => {
 	})
 	
 	// Fetch ERC balance
-	const { data: balanceErc, isError: isErrorErc, isLoading: isLoadingErc } = useBalance({
+	const { data: balanceErc, isError: isErrorErc, isLoading: isLoadingErc, refetch: refetchErc } = useBalance({
 		address: userAddress,
 		token: erc20AddrInput ? erc20AddrInput : "0x00",
 	})
 
 	// Fetch Eth balance
-	const { data: balanceEth, isError: isErrorEth, isLoading: isLoadingEth } = useBalance({
+	const { data: balanceEth, isError: isErrorEth, isLoading: isLoadingEth, refetch: refetchEth } = useBalance({
 		address: userAddress,
 	})
+
+	// Refetching ERC balance on Event
+	// First thought to do it on the block number event but it would be very big overload
+	// as it will fetch at every block.
+	// Doing it on event change is efficient
+	useWatchContractEvent({
+		address: erc20AddrInput,
+		abi: FSTokenAbi,
+		eventName: 'Transfer',
+		onLogs() {
+			refetchErc()
+			console.log("ERC20 balance changed")
+		},
+	  })
+
+	// Refetch ERC balance if changed
+	// Only refetching eth balance on new blocks
+	useEffect(() => { 
+		refetchEth()
+	}, [blockNumber]) 
+
+	// Refetching allowance
+	useWatchContractEvent({
+		address: erc20AddrInput,
+		abi: FSTokenAbi,
+		eventName: 'Approval',
+		onLogs() {
+			refetchAllowance()
+			console.log("Allowance changed")
+		},
+	  })
 
 	// Handling token type change
 	const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
